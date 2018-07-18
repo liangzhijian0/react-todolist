@@ -8,14 +8,40 @@ import ListContent from './Component/ListContent'
 import FilterList from './Component/FilterList'
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state ={
+      status:'all',
+      todos:
+        [{
+            id:'111232',
+            name: 'Parking Lot APP Refactor',
+            isComplete:false
+        },
+        {
+            id:'113232',
+            name: 'JQQQQQQQ',
+            isComplete:true
+        }]      
+      }   
+  }
+
+  showStatus = (status) => {
+    this.setState({status})
+  }
+
+
+
+
+
   render() {
     return (
       <div className="container">
         <Header />
         <InputList />
         <br/>
-        <ListContent />
-        <FilterList />
+        <ListContent todoList={this.state.todoList}/>
+        <FilterList status={this.state.status} changeStatus={this.showStatus}/>
       </div>
     );
   }
