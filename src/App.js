@@ -32,8 +32,7 @@ class App extends Component {
 
   changeCheck = (viewId) => {
     let todos = this.deepCopy(this.state.todos);
-    let target = todos.find(item => item.id === viewId);
-    target.isComplete = !target.isComplete;
+    todos.find(item => item.id === viewId).isComplete = !todos.find(item => item.id === viewId).isComplete
     this.setState({todos});
   }
 
@@ -43,9 +42,35 @@ class App extends Component {
     this.setState({todos});
   }
 
+  addItem = (name) => {
+    let todos = this.deepCopy(this.state.todos);
+    todos.push({id:this.generateUUID(),name,isComplete:false});
+    this.setState({todos});
+  }
+
   deepCopy(array) {
     return JSON.parse(JSON.stringify(array));
   }
+
+  generateUUID=()=> {
+    /*jshint bitwise:false */
+    var i,
+        random;
+    var uuid = '';
+
+    for (i = 0; i < 32; i++) {
+        random = Math.random() * 16 | 0;
+        if (i === 8 || i === 12 || i === 16 || i === 20) {
+            uuid += '-';
+        }
+        uuid += (i === 12
+            ? 4
+            : (i === 16
+                ? (random & 3 | 8)
+                : random)).toString(16);
+    }
+    return uuid;
+}
 
   filerByStatus = (status) =>{
     if (status === 'all') {
@@ -63,7 +88,7 @@ class App extends Component {
       <div className="container">
         <Header />
 
-        <InputList />
+        <InputList addHandler={this.addItem}/>
         <br/>
 
         <div className="ListContent"> 

@@ -35,7 +35,8 @@ export default class ListContent extends Component {
                 <input
                     type="checkbox"
                     className="done-todo"
-                    defaultChecked={todos.isComplete}
+                    // defaultChecked={todos.isComplete}
+                    checked={todos.isComplete?'checked':''}
                     onClick={e => this.toggleActive(todos.id)}
                 />
             
