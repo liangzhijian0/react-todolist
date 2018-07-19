@@ -26,22 +26,62 @@ class App extends Component {
       }   
   }
 
-  showStatus = (status) => {
+  changeStatus = (status) => {
     this.setState({status})
   }
 
+  changeCheck = (viewId) => {
+    let todos = this.deepCopy(this.state.todos);
+    let target = todos.find(item => item.id === viewId);
+    target.isComplete = !target.isComplete;
+    this.setState({todos});
+  }
 
+  changeContent = (newId,newName) => {
+    let todos = this.deepCopy(this.state.todos);
+    todos.find(item => item.id === newId).name = newName; 
+    this.setState({todos});
+  }
 
+  deepCopy(array) {
+    return JSON.parse(JSON.stringify(array));
+  }
+
+  filerByStatus = (status) =>{
+    if (status === 'all') {
+      return this.state.todos;
+    }else if(status === 'active'){
+      return this.state.todos.filter(item => !item.isComplete);
+    }else{
+      return this.state.todos.filter(item => item.isComplete);
+    } 
+  }
 
 
   render() {
     return (
       <div className="container">
         <Header />
+
         <InputList />
         <br/>
-        <ListContent todoList={this.state.todoList}/>
-        <FilterList status={this.state.status} changeStatus={this.showStatus}/>
+
+        <div className="ListContent"> 
+          <ol>
+            {
+              this.filerByStatus(this.state.status).map( item => 
+                <ListContent
+                  todos={item} 
+                  toggleActiveHandler={this.changeCheck}
+                  updateItemContent={this.changeContent}
+                />
+              )
+            }
+          </ol>
+        </div>
+            
+
+        <FilterList status={this.state.status} changeStatusHandler={this.changeStatus}/>
       </div>
     );
   }
